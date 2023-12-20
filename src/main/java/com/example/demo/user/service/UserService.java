@@ -1,12 +1,12 @@
-package com.example.demo.User.service;
+package com.example.demo.user.service;
 
-import com.example.demo.User.entity.User;
-import com.example.demo.User.entity.UserRoleEnum;
-import com.example.demo.User.jwt.JwtUtil;
-import com.example.demo.User.repository.UserRepository;
-import com.example.demo.User.requestdto.LoginRequestDTO;
-import com.example.demo.User.requestdto.SignUpRequestDTO;
-import com.example.demo.User.responsedto.ResponseDTO;
+import com.example.demo.user.entity.User;
+import com.example.demo.user.entity.UserRoleEnum;
+import com.example.demo.user.jwt.JwtUtil;
+import com.example.demo.user.repository.UserRepository;
+import com.example.demo.user.requestdto.LoginRequestDTO;
+import com.example.demo.user.requestdto.SignUpRequestDTO;
+import com.example.demo.user.responsedto.UserResponseDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class UserService {
 
     private final String ADMIN_TOKEN = "123456789";
 
-    public ResponseDTO signup(SignUpRequestDTO signUpRequestDTO) {
+    public UserResponseDTO signup(SignUpRequestDTO signUpRequestDTO) {
         String username = signUpRequestDTO.getUsername();
         String password = signUpRequestDTO.getPassword();
         String confirmpassword = signUpRequestDTO.getConfirmpassword();
@@ -30,20 +30,20 @@ public class UserService {
         // 중복된 닉네임인지 확인
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
-            return  ResponseDTO.builder()
+            return  UserResponseDTO.builder()
                     .message("중복된 사용자가 존재 합니다.")
                     .build();
 
         }
 
         if(!password.equals(confirmpassword)){
-            return ResponseDTO.builder()
+            return UserResponseDTO.builder()
                     .message("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
                     .build();
         }
 
         if (password.contains(username)) {
-            return ResponseDTO.builder()
+            return UserResponseDTO.builder()
                     .message("비밀번호에 아이디를 포함할수 없습니다.")
                     .build();
         }
@@ -67,20 +67,20 @@ public class UserService {
         userRepository.save(user);
 
 
-        return  ResponseDTO.builder()
+        return  UserResponseDTO.builder()
                 .message("회원가입 성공")
                 .build();
     }
 
 
-    public ResponseDTO login(LoginRequestDTO loginRequestDTO,  HttpServletResponse res){
+    public UserResponseDTO login(LoginRequestDTO loginRequestDTO, HttpServletResponse res){
         String username = loginRequestDTO.getUsername();
         String password = loginRequestDTO.getPassword();
 
         // 사용자가 존재하는지 확인
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isEmpty()) {
-            return ResponseDTO.builder()
+            return UserResponseDTO.builder()
                     .message("사용자를 찾을 수 없습니다.")
                     .build();
         }
@@ -88,17 +88,15 @@ public class UserService {
         User user = userOptional.get();
         // 비밀번호 일치 여부 확인
         if (!user.getPassword().equals(password)) {
-            return ResponseDTO.builder()
+            return UserResponseDTO.builder()
                     .message("비밀번호가 일치하지 않습니다.")
                     .build();
         }
 
-        // JWT 생성 및 쿠키에 저장 후 Response 객체에 추가
-        String token = jwtUtil.createToken(user.getUsername(), user.getRole());
-        jwtUtil.addJwtToCookie(token, res);
+        res.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(loginRequestDTO.getUsername()));
 
 
-        return ResponseDTO.builder().
+        return UserResponseDTO.builder().
                 message("로그인 성공").
                 build();
     }

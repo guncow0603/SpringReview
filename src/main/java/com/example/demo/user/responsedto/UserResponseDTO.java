@@ -1,14 +1,14 @@
-package com.example.demo.User.responsedto;
+package com.example.demo.user.responsedto;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class ResponseDTO {
+public class UserResponseDTO {
    private String message;
 
     @Builder
-    private ResponseDTO (String message){
+    private UserResponseDTO(String message){
         this.message = message;
     }
 }
