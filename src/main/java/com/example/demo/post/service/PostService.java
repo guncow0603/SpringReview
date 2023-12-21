@@ -44,9 +44,7 @@ public class PostService {
     public PostResponseDTO updatePost(Long postId,PostRequestDTO postRequestDTO, User user) {
         Post post = findById(postId);
 
-        if((post.getUser().getId())!= user.getId()){
-            throw new IllegalArgumentException("게시글 작성자와 수정자 id가 다릅니다.");
-        }
+
 
         post.updatePost(postRequestDTO);
 
@@ -56,6 +54,13 @@ public class PostService {
                 .username(post.getUser().getUsername())
                 .build();
     }
+    @Transactional
+    public void deletePost(Long postId, User user) {
+        Post post = findById(postId);
+        checkUser(post,user);
+
+        postRepository.delete(post);
+    }
 
     public Post findById(Long postId) {
         //findById 메서드를 사용하여 Post 엔티티를 찾을 때는 반환 타입이 Optional<Post>이므로,
@@ -64,4 +69,10 @@ public class PostService {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new NoSuchElementException("ID가 " + postId + "인 게시물을 찾을 수 없습니다." + postId));
     }
+    public void checkUser(Post post,User user){
+        if((post.getUser().getId())!= user.getId()){
+            throw new IllegalArgumentException("게시글 작성자와 수정자 id가 다릅니다.");
+        }
+    }
+
 }
