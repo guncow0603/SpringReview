@@ -8,11 +8,11 @@ public class PostResponseDTO {
 
     private String username;
     private String title;
-    private String post;
+    private String comment;
     @Builder
-    private PostResponseDTO(String username,String title, String post){
+    private PostResponseDTO(String username,String title, String comment){
         this.username=username;
         this.title=title;
-        this.post=post;
+        this.comment = comment;
     }
 }

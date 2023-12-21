@@ -1,6 +1,7 @@
 package com.example.demo.post.entity;
 
 import com.example.demo.user.entity.User;
+import com.example.demo.utils.BaseTime;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,13 +13,13 @@ import lombok.NoArgsConstructor;
 @Table(name="posts")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+public class Post extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String post;
+    private String comment;
 
     private String title;
 
@@ -30,8 +31,8 @@ public class Post {
     private User user;
 
     @Builder
-    private Post(String post,String title,User user){
-        this.post=post;
+    private Post(String comment, String title, User user){
+        this.comment = comment;
         this.title=title;
         this.user=user;
     }

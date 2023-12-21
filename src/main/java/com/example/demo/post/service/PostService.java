@@ -3,10 +3,13 @@ package com.example.demo.post.service;
 import com.example.demo.post.entity.Post;
 import com.example.demo.post.repository.PostRepository;
 import com.example.demo.post.requestdto.PostRequestDTO;
+import com.example.demo.post.responsedto.GetAllPostResponseDTO;
 import com.example.demo.post.responsedto.PostResponseDTO;
 import com.example.demo.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,7 +18,7 @@ public class PostService {
     public PostResponseDTO createPost(PostRequestDTO postRequestDTO, User user) {
 
         Post post=Post.builder().
-                post(postRequestDTO.getPost()).
+                comment(postRequestDTO.getComment()).
                 title(postRequestDTO.getTitle()).
                 user(user).
                 build();
@@ -25,7 +28,14 @@ public class PostService {
         return PostResponseDTO.builder()
                 .username(user.getUsername())
                 .title(postRequestDTO.getTitle())
-                .post(postRequestDTO.getPost())
+                .comment(postRequestDTO.getComment())
                 .build();
+    }
+
+    public List<GetAllPostResponseDTO> getPosts(User user) {
+        return postRepository.findAllByOrderByCreatedAtDesc()
+                .stream()
+                .map(GetAllPostResponseDTO::new)
+                .toList();
     }
 }
