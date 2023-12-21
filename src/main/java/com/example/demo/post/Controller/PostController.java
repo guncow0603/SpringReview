@@ -1,6 +1,5 @@
 package com.example.demo.post.Controller;
 
-import com.example.demo.post.entity.Post;
 import com.example.demo.post.requestdto.PostRequestDTO;
 import com.example.demo.post.responsedto.GetAllPostResponseDTO;
 import com.example.demo.post.responsedto.PostResponseDTO;
@@ -29,5 +28,12 @@ public class PostController {
     @GetMapping
     public List<GetAllPostResponseDTO> getPosts(@AuthenticationPrincipal UserDetailsImpl userDetails){
        return postService.getPosts(userDetails.getUser());
+    }
+
+    @PutMapping("/{postId}")
+    public PostResponseDTO updatePost(@PathVariable Long postId,
+                                      @RequestBody PostRequestDTO postRequestDTO,
+                                      @AuthenticationPrincipal UserDetailsImpl userDtails){
+       return postService.updatePost(postId,postRequestDTO,userDtails.getUser());
     }
 }

@@ -1,9 +1,9 @@
 package com.example.demo.post.entity;
 
+import com.example.demo.post.requestdto.PostRequestDTO;
 import com.example.demo.user.entity.User;
 import com.example.demo.utils.BaseTime;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,14 +12,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="posts")
 @NoArgsConstructor
-@AllArgsConstructor
 public class Post extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String comment;
+    private String content;
 
     private String title;
 
@@ -31,9 +30,14 @@ public class Post extends BaseTime {
     private User user;
 
     @Builder
-    private Post(String comment, String title, User user){
-        this.comment = comment;
+    private Post(String content, String title, User user){
+        this.content = content;
         this.title=title;
         this.user=user;
+    }
+
+    public void updatePost(PostRequestDTO postRequestDTO){
+        this.content = postRequestDTO.getContent();
+        this.title = postRequestDTO.getTitle();
     }
 }

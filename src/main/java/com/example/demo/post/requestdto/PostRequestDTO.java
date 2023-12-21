@@ -5,6 +5,8 @@ import lombok.Getter;
 @Getter
 public class PostRequestDTO {
     private String title;
-    private String comment;
+    private String content;
+
+
 
 }

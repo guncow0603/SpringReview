@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 public class GetAllPostResponseDTO {
     private String username;
     private LocalDateTime createdAt;
-    private String comment;
+    private String content;
     private String title;
 
     public GetAllPostResponseDTO(Post post){
         this.username=post.getUser().getUsername();
         this.createdAt=post.getCreatedAt();
-        this.comment=post.getComment();
+        this.content =post.getContent();
         this.title=post.getTitle();
     }
 }
