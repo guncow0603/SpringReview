@@ -1,9 +1,11 @@
 package com.example.demo.post.service;
 
+import com.example.demo.comment.ResponseDTO.CommentResponseDTO;
+import com.example.demo.comment.repository.CommentRepository;
 import com.example.demo.post.entity.Post;
 import com.example.demo.post.repository.PostRepository;
 import com.example.demo.post.requestdto.PostRequestDTO;
-import com.example.demo.post.responsedto.GetAllPostResponseDTO;
+import com.example.demo.post.responsedto.PostCommentResponseDTO;
 import com.example.demo.post.responsedto.PostResponseDTO;
 import com.example.demo.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
     public PostResponseDTO createPost(PostRequestDTO postRequestDTO, User user) {
 
         Post post=Post.builder().
@@ -29,13 +32,24 @@ public class PostService {
 
         return new PostResponseDTO(post);
     }
-
-    public List<GetAllPostResponseDTO> getPosts(User user) {
+    @Transactional
+    public List<PostResponseDTO> getPosts() {
         return postRepository.findAllByOrderByCreatedAtDesc()
                 .stream()
-                .map(GetAllPostResponseDTO::new)
+                .map(PostResponseDTO::new)
                 .toList();
     }
+    @Transactional
+    public PostCommentResponseDTO getPost(Long postId) {
+        Post post=findById(postId);
+        List<CommentResponseDTO>commentList=commentRepository.findAllByOrderByCreatedAtDesc()
+                                                             .stream()
+                                                             .map(CommentResponseDTO::new)
+                                                             .toList();
+        return new PostCommentResponseDTO(post,commentList);
+    }
+
+
     @Transactional
     public PostResponseDTO updatePost(Long postId,PostRequestDTO postRequestDTO, User user) {
         Post post = findById(postId);
@@ -52,6 +66,8 @@ public class PostService {
         postRepository.delete(post);
     }
 
+
+
     public Post findById(Long postId) {
         //findById 메서드를 사용하여 Post 엔티티를 찾을 때는 반환 타입이 Optional<Post>이므로,
         // 메서드에서 이를 적절히 처리해야 합니다. 따라서 Optional<Post>에서 실제 Post 객체를 얻기 위해서는
@@ -64,5 +80,6 @@ public class PostService {
             throw new IllegalArgumentException("게시글 작성자와 수정자 id가 다릅니다.");
         }
     }
+
 
 }

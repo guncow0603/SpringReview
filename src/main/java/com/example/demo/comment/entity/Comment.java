@@ -1,6 +1,7 @@
 package com.example.demo.comment.entity;
 
 import com.example.demo.post.entity.Post;
+import com.example.demo.utils.BaseTime;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "comments")
 @NoArgsConstructor
-public class Comment {
+public class Comment extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

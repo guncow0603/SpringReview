@@ -1,7 +1,7 @@
 package com.example.demo.post.Controller;
 
 import com.example.demo.post.requestdto.PostRequestDTO;
-import com.example.demo.post.responsedto.GetAllPostResponseDTO;
+import com.example.demo.post.responsedto.PostCommentResponseDTO;
 import com.example.demo.post.responsedto.PostResponseDTO;
 import com.example.demo.post.service.PostService;
 import com.example.demo.security.UserDetailsImpl;
@@ -26,8 +26,13 @@ public class PostController {
         return postService.createPost(postRequestDTO,userDetails.getUser());
     }
     @GetMapping
-    public List<GetAllPostResponseDTO> getPosts(@AuthenticationPrincipal UserDetailsImpl userDetails){
-       return postService.getPosts(userDetails.getUser());
+    public List<PostResponseDTO> getPosts(){
+       return postService.getPosts();
+    }
+
+    @GetMapping("/{postId}")
+    public PostCommentResponseDTO getPost(@PathVariable Long postId){
+        return postService.getPost(postId);
     }
 
     @PutMapping("/{postId}")
@@ -43,4 +48,7 @@ public class PostController {
         postService.deletePost(postId,userDtails.getUser());
         return "삭제 되었습니다";
     }
+
+
+
 }

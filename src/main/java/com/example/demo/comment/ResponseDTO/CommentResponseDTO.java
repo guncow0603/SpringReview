@@ -1,7 +1,9 @@
 package com.example.demo.comment.ResponseDTO;
 
-import lombok.Builder;
+import com.example.demo.comment.entity.Comment;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Getter
 public class CommentResponseDTO {
@@ -9,12 +11,13 @@ public class CommentResponseDTO {
     private Long postId;
     private Long commentId;
     private String username;
+    private LocalDateTime createdAt;
 
-    @Builder
-    public CommentResponseDTO(String text, Long postId, Long commentId, String username){
-        this.text=text;
-        this.postId=postId;
-        this.commentId=commentId;
-        this.username=username;
+    public CommentResponseDTO(Comment comment){
+        this.text=comment.getText();
+        this.postId=comment.getPost().getId();
+        this.commentId=comment.getId();
+        this.username=comment.getUsername();
+        this.createdAt=comment.getCreatedAt();
     }
 }

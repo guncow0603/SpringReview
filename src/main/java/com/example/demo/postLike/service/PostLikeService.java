@@ -23,8 +23,8 @@ public class PostLikeService {
         PostLike postLike = postLikeRepository.findByPostAndUser(post,user)
                 .orElseGet(() -> savePostLike(post,user));
 
-        postLike.updatePostLikeState();
         post.updatePostLikeCnt(postLike.isLikeState());
+        postLike.updatePostLikeState();
 
         return new LikeResponseDTO(postLike);
     }

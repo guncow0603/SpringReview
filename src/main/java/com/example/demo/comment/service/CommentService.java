@@ -27,12 +27,7 @@ public class CommentService {
 
         commentRepository.save(comment);
 
-        return CommentResponseDTO.builder()
-                .commentId(comment.getId())
-                .postId(postId)
-                .username(user.getUsername())
-                .text(comment.getText())
-                .build();
+        return new CommentResponseDTO(comment);
     }
 
     private Post findById(Long postId) {
