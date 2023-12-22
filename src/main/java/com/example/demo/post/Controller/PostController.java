@@ -6,6 +6,10 @@ import com.example.demo.post.responsedto.PostResponseDTO;
 import com.example.demo.post.service.PostService;
 import com.example.demo.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +30,12 @@ public class PostController {
         return postService.createPost(postRequestDTO,userDetails.getUser());
     }
     @GetMapping
-    public List<PostResponseDTO> getPosts(){
-       return postService.getPosts();
+    public ResponseEntity<Page<PostResponseDTO>> getPosts(@PageableDefault(size = 5) Pageable pageable) {
+        Page<PostResponseDTO> postPage = postService.getPosts(pageable);
+        return ResponseEntity.ok(postPage);
     }
+
+
 
     @GetMapping("/{postId}")
     public PostCommentResponseDTO getPost(@PathVariable Long postId){

@@ -9,6 +9,8 @@ import com.example.demo.post.responsedto.PostCommentResponseDTO;
 import com.example.demo.post.responsedto.PostResponseDTO;
 import com.example.demo.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,12 +35,11 @@ public class PostService {
         return new PostResponseDTO(post);
     }
     @Transactional
-    public List<PostResponseDTO> getPosts() {
-        return postRepository.findAllByOrderByCreatedAtDesc()
-                .stream()
-                .map(PostResponseDTO::new)
-                .toList();
+    public Page<PostResponseDTO> getPosts(Pageable pageable) {
+        Page<Post> postPage = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        return postPage.map(PostResponseDTO::new);
     }
+
     @Transactional
     public PostCommentResponseDTO getPost(Long postId) {
         Post post= findByPostId(postId);
