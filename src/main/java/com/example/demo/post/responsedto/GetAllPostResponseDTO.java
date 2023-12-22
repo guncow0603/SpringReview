@@ -11,11 +11,13 @@ public class GetAllPostResponseDTO {
     private LocalDateTime createdAt;
     private String content;
     private String title;
+    private Long postLikeCount;
 
     public GetAllPostResponseDTO(Post post){
         this.username=post.getUser().getUsername();
         this.createdAt=post.getCreatedAt();
         this.content =post.getContent();
         this.title=post.getTitle();
+        this.postLikeCount=post.getPostLikeCount();
     }
 }

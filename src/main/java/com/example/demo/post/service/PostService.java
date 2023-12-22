@@ -27,11 +27,7 @@ public class PostService {
 
         postRepository.save(post);
 
-        return PostResponseDTO.builder()
-                .username(user.getUsername())
-                .title(postRequestDTO.getTitle())
-                .content(postRequestDTO.getContent())
-                .build();
+        return new PostResponseDTO(post);
     }
 
     public List<GetAllPostResponseDTO> getPosts(User user) {
@@ -43,16 +39,10 @@ public class PostService {
     @Transactional
     public PostResponseDTO updatePost(Long postId,PostRequestDTO postRequestDTO, User user) {
         Post post = findById(postId);
-
-
-
+        checkUser(post,user);
         post.updatePost(postRequestDTO);
 
-        return PostResponseDTO.builder()
-                .content(post.getContent())
-                .title(post.getTitle())
-                .username(post.getUser().getUsername())
-                .build();
+        return new PostResponseDTO(post);
     }
     @Transactional
     public void deletePost(Long postId, User user) {
