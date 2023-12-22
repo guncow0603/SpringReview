@@ -41,7 +41,7 @@ public class PostService {
     }
     @Transactional
     public PostCommentResponseDTO getPost(Long postId) {
-        Post post=findById(postId);
+        Post post= findByPostId(postId);
         List<CommentResponseDTO>commentList=commentRepository.findAllByOrderByCreatedAtDesc()
                                                              .stream()
                                                              .map(CommentResponseDTO::new)
@@ -52,15 +52,15 @@ public class PostService {
 
     @Transactional
     public PostResponseDTO updatePost(Long postId,PostRequestDTO postRequestDTO, User user) {
-        Post post = findById(postId);
+        Post post = findByPostId(postId);
         checkUser(post,user);
-        post.updatePost(postRequestDTO);
+        post.postUpdate(postRequestDTO);
 
         return new PostResponseDTO(post);
     }
     @Transactional
     public void deletePost(Long postId, User user) {
-        Post post = findById(postId);
+        Post post = findByPostId(postId);
         checkUser(post,user);
 
         postRepository.delete(post);
@@ -68,7 +68,7 @@ public class PostService {
 
 
 
-    public Post findById(Long postId) {
+    public Post findByPostId(Long postId) {
         //findById 메서드를 사용하여 Post 엔티티를 찾을 때는 반환 타입이 Optional<Post>이므로,
         // 메서드에서 이를 적절히 처리해야 합니다. 따라서 Optional<Post>에서 실제 Post 객체를 얻기 위해서는
         // Optional 클래스의 메서드 중 하나인 orElse(null)이나 orElseThrow() 등을 사용해야 합니다.

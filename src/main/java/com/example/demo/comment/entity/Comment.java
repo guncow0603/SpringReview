@@ -1,6 +1,8 @@
 package com.example.demo.comment.entity;
 
+import com.example.demo.comment.RequestDTO.CommentRequestDTO;
 import com.example.demo.post.entity.Post;
+import com.example.demo.user.entity.User;
 import com.example.demo.utils.BaseTime;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -22,11 +24,17 @@ public class Comment extends BaseTime {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    private String username;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
     @Builder
-    public Comment(String text, Post post, String username){
+    public Comment(String text, Post post, User user){
         this.text=text;
         this.post=post;
-        this.username=username;
+        this.user=user;
+    }
+
+    public void commentUpdate(CommentRequestDTO commentRequestDTO){
+        this.text=commentRequestDTO.getText();
     }
 }

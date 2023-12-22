@@ -39,7 +39,7 @@ public class Post extends BaseTime {
         this.postLikeCount=0L;
     }
 
-    public void updatePost(PostRequestDTO postRequestDTO){
+    public void postUpdate(PostRequestDTO postRequestDTO){
         this.content = postRequestDTO.getContent();
         this.title = postRequestDTO.getTitle();
     }

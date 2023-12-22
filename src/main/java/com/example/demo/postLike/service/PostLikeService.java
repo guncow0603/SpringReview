@@ -17,7 +17,7 @@ public class PostLikeService {
     private final PostLikeRepository postLikeRepository;
     @Transactional
     public LikeResponseDTO likeSwitch(User user, Long postId) {
-        Post post =postService.findById(postId);
+        Post post =postService.findByPostId(postId);
 
         // 댓글에 대한 좋아요 정보를 찾거나, 없으면 생성하여 가져옴
         PostLike postLike = postLikeRepository.findByPostAndUser(post,user)
